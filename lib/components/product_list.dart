@@ -26,7 +26,7 @@ class _ProductListState extends State<ProductList> {
       var response = await http.get(
           Uri.encodeFull( "http://jemona.dopos.in:3001/api/v2/menu_cards/section_active_menu_card?device_id=DOPOS20&email=admin@dopos.in&page=" +
               index.toString() +
-              "&count=10&resources=products&section_name=jemona_app"),
+              "&count=10&resources=products&section_name=jemona_app&image_size=medium"),
           headers: {
             "Content-Type": "application/json"
           }
@@ -75,10 +75,7 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Lazy Load Large List"),
-      ),
-      body: Container(
+      body: Card(
         child: _buildList(),
       ),
       resizeToAvoidBottomPadding: false,
@@ -86,26 +83,48 @@ class _ProductListState extends State<ProductList> {
   }
 
   Widget _buildList() {
-    return ListView.builder(
-      itemCount: prods.length + 1, // Add one more item for progress indicator
-      padding: EdgeInsets.symmetric(vertical: 8.0),
+    return GridView.builder(
+      itemCount: prods.length + 1,
+      gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 4, crossAxisSpacing: 4),
       itemBuilder: (BuildContext context, int index) {
-
         if (index == prods.length) {
           return _buildProgressIndicator();
-        } else {
+        }
+        else
+        {
           String price = prods[index]['sell_price'].toString();
-          return new ListTile(
-            leading: CircleAvatar(
-              radius: 30.0,
-              backgroundImage: NetworkImage(
-                'http://jemona.dopos.in:3001' + prods[index]['product_image_url'],
+          String old_price = prods[index]['procured_price'].toString();
+          return new Hero(
+            tag: prods[index]['product_name'],
+            child: Material(
+              child: InkWell(
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new ProductDetails())),
+                child: GridTile(
+                  footer: Container(
+                    color: Colors.white70,
+                    child: ListTile(
+                        leading: Text(prods[index]['product_name'],
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        title: Text("\₹$price", style: TextStyle(color: Colors.pink, fontWeight: FontWeight.w800),),
+                        subtitle: Text(
+                          "\₹$old_price",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w800,
+                              decoration: TextDecoration.lineThrough
+                          ),
+                        )
+                    ),
+                  ),
+                  child: Image.network('http://jemona.dopos.in:3001' + prods[index]['product_image_url'], fit: BoxFit.contain,),
+                ),
               ),
             ),
-            title: Text((prods[index]['product_name'])),
-            subtitle: Text("\₹$price"),
           );
-        }
+        } // END else
       },
       controller: _sc,
     );

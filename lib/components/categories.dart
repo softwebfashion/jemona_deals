@@ -11,7 +11,6 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-
   ResultData rd;
 
   Future<String> getData() async {

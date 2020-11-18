@@ -3,7 +3,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 
 // My Own Imports
 import 'package:jemona_deals/components/categories.dart';
-import 'package:jemona_deals/components/products.dart';
+import 'package:jemona_deals/components/product_list.dart';
 
 void main(){
   runApp(
@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
           //  GRID VIEW
           Container(
             height: 320.0,
-            child: Products(),
+            child: ProductList(),
           )
 
         ],

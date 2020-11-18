@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
 // My Own Imports
-import 'package:jemona_deals/components/horizontal_listview.dart';
+import 'package:jemona_deals/components/categories.dart';
 import 'package:jemona_deals/components/products.dart';
 
 void main(){
@@ -143,7 +143,11 @@ class _HomePageState extends State<HomePage> {
           ),
 
           // Horizontal list view
-          HorizontalList(),
+          // HorizontalList(),
+          Container(
+            height: 100.0,
+            child: Categories(),
+          ),
 
           // Padding widget
           new Padding(

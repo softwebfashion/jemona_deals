@@ -2,6 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
+// COMPONENTS
+import 'package:jemona_deals/models/result_data.dart';
+import 'package:jemona_deals/models/category.dart';
+
 import 'package:http/http.dart' as http;
 
 
@@ -72,12 +77,12 @@ class _CategoriesState extends State<Categories> {
               child: InkWell(
                 onTap: (){},
                 child: Container(
-                  width: 100.0,
+                  width: 90.0,
                   child: ListTile(
-                    title: Image.network('http://jemona.dopos.in:3001' + sub_categories[index].image, width: 100.0, height: 80.0),
+                    title: Image.network('http://jemona.dopos.in:3001' + sub_categories[index].image, width: 50.0, height: 50.0),
                     subtitle: Container(
                       alignment: Alignment.topCenter,
-                      child: Text(sub_categories[index].name, style: new TextStyle(fontSize: 12.0,),),
+                      child: Text(sub_categories[index].name, style: new TextStyle(fontSize: 10.0),),
                     ),
                   ),
                 ),
@@ -87,105 +92,5 @@ class _CategoriesState extends State<Categories> {
         ),
       );
     }
-  }
-}
-
-class ResultData{
-  final String status;
-  final Messages message;
-  final MenuCard mc;
-
-  ResultData({
-    this.status,
-    this.message,
-    this.mc
-  });
-
-  factory ResultData.fromJson(Map<String, dynamic> parsedJson){
-    return ResultData(
-        status:parsedJson['status'],
-        message:parsedJson['message'],
-        mc: parsedJson["data"] == null ? null : MenuCard.fromJson(parsedJson["data"])
-    );
-  }
-
-}
-
-class Messages{
-  final String simple_message;
-  final String internal_message;
-
-  Messages({
-    this.simple_message,
-    this.internal_message
-  });
-
-  factory Messages.fromJson(Map<String, dynamic> parsedJson){
-    return Messages(
-        simple_message:parsedJson['simple_message'],
-        internal_message:parsedJson['internal_message']
-    );
-  }
-
-}
-
-class MenuCard{
-  final int id;
-  final int mode;
-  final int section_id;
-  final int unit_id;
-  final String name;
-  final List<Category> cats;
-
-  MenuCard({
-    this.id,
-    this.mode,
-    this.section_id,
-    this.unit_id,
-    this.name,
-    this.cats
-  });
-
-  factory MenuCard.fromJson(Map<String, dynamic> parsedJson){
-
-    var list = parsedJson['categories'] as List;
-    List<Category> dataList = list.map((i) => Category.fromJson(i)).toList();
-
-
-    return MenuCard(
-        id: parsedJson['id'],
-        mode: parsedJson['mode'],
-        section_id: parsedJson['section_id'],
-        unit_id: parsedJson['unit_id'],
-        name: parsedJson['name'],
-        cats: dataList
-    );
-  }
-}
-
-class Category {
-
-  final int id;
-  final String name;
-  final String image;
-  final List<Category> sub_cats;
-
-  Category({
-    this.id,
-    this.name,
-    this.image,
-    this.sub_cats
-  });
-
-  factory Category.fromJson(Map<String, dynamic> parsedJson){
-
-    var list = parsedJson['sub_categories'] as List;
-    List<Category> subCatList = (parsedJson['sub_categories'] == null) ? null : list.map((i) => Category.fromJson(i)).toList();
-    return Category(
-        id:parsedJson['id'],
-        name:parsedJson['name'],
-        image:parsedJson['menu_category_image'],
-        sub_cats: subCatList
-    );
   }
 }

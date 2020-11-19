@@ -3,7 +3,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 
 // My Own Imports
 import 'package:jemona_deals/components/categories.dart';
-import 'package:jemona_deals/components/product_list.dart';
+import 'package:jemona_deals/components/products.dart';
 
 void main(){
   runApp(
@@ -145,20 +145,20 @@ class _HomePageState extends State<HomePage> {
           // Horizontal list view
           // HorizontalList(),
           Container(
-            height: 100.0,
+            height: 70.0,
             child: Categories(),
           ),
 
           // Padding widget
           new Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(8.0),
               child: new Text("Recent Products")
           ),
 
           //  GRID VIEW
           Container(
-            height: 320.0,
-            child: ProductList(),
+            height: 385.0,
+            child: Products(),
           )
 
         ],

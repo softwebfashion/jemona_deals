@@ -19,7 +19,7 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   ResultData rd;
-  static int page = 0;
+  static int page = 1;
   ScrollController _sc = new ScrollController();
   bool isLoading = false;
   List<Product> prods = new List<Product>();
@@ -38,7 +38,7 @@ class _ProductsState extends State<Products> {
             "Content-Type": "application/json"
           }
       );
-      List tList = new List();
+
       if (response.statusCode == 200) {
         this.setState(() {
           final jsonResponse = json.decode(response.body);
@@ -63,8 +63,7 @@ class _ProductsState extends State<Products> {
     this._getMoreData(page);
     super.initState();
     _sc.addListener(() {
-      if (_sc.position.pixels ==
-          _sc.position.maxScrollExtent) {
+      if (_sc.position.pixels == _sc.position.maxScrollExtent) {
         _getMoreData(page);
       }
     });
@@ -97,13 +96,18 @@ class _ProductsState extends State<Products> {
         }
         else
         {
-          String price = prods[index].price.toString();
-          String old_price = prods[index].old_price.toString();
+          String price = prods[index].sell_price.toString();
+          String old_price = prods[index].procured_price.toString();
           return new Hero(
-            tag: prods[index].name,
+            tag: prods[index].product_name,
             child: Material(
               child: InkWell(
-                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new ProductDetails())),
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context)=> new ProductDetails(
+                    mc_id: rd.mc.id,
+                    p_id: prods[index].product_id
+                  )
+                )),
                 child: GridTile(
                   footer: Container(
                     color: Colors.black54,
@@ -114,7 +118,7 @@ class _ProductsState extends State<Products> {
                           child: new Column(
                             children: <Widget>[
                               new  ListTile(
-                                leading: Text(prods[index].name,
+                                leading: Text(prods[index].product_name,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,

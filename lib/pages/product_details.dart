@@ -3,11 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:http/http.dart' as http;
 
 // COMPONENTS
 import 'package:jemona_deals/models/product.dart';
-
-import 'package:http/http.dart' as http;
 
 class ProductDetails extends StatefulWidget {
   final mc_id;
@@ -62,6 +62,32 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   Widget build(BuildContext context) {
+    String price;
+    String old_price;
+    String discount;
+
+    var p = 0 ;
+    var op = 0 ;
+    var d = 0 ;
+    if(product == null){
+      price = p.toString();
+      old_price = op.toString();
+      discount = d.toString();
+    }else{
+      price = product.sell_price.toString();
+      old_price = product.procured_price.toString();
+      if ((product.procured_price - product.sell_price) > 0)
+      {
+        d = (((product.procured_price - product.sell_price)*100) / product.procured_price).toInt();
+        discount = d.toString();
+      }
+      else{
+        discount = 0.toString();
+      }
+    }
+
+    double full_width = MediaQuery.of(context).size.width;
+
     Widget image_carousel = new Container(
       height: 400.0,
       child: new Carousel(
@@ -81,13 +107,141 @@ class _ProductDetailsState extends State<ProductDetails> {
         backgroundColor: Colors.pink,
         title: Text("Product"),
         actions: [
-          new IconButton(icon: Icon(Icons.search, color: Colors.white), onPressed: (){}),
+          // new IconButton(icon: Icon(Icons.search, color: Colors.white), onPressed: (){}),
           new IconButton(icon: Icon(Icons.shopping_cart, color: Colors.white), onPressed: (){})
         ],
       ),
       body: ListView(
         children: [
-          image_carousel,
+          // image_carousel,
+          new Container(
+            height: 400.0,
+            child: GridTile(
+              child: Container(
+                color: Colors.white,
+                child: image_carousel,
+              ),
+            ),
+          ),
+          new Container(
+            height: 60.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: HexColor("#19B6AA"))),
+                  onPressed: () {},
+                  color: HexColor("#19B6AA"),
+                  textColor: Colors.white,
+                  child: Text("Buy now".toUpperCase(),
+                      style: TextStyle(fontSize: 14)),
+                ),
+                SizedBox(width: 10),
+                RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: HexColor("#A10968"))),
+                  onPressed: () {},
+                  color: HexColor("#A10968"),
+                  textColor: Colors.white,
+                  child: Text("Share".toUpperCase(),
+                      style: TextStyle(fontSize: 14)),
+                ),
+                SizedBox(width: 10),
+                RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: HexColor("#e3af41"))),
+                  onPressed: () {},
+                  color: HexColor("#e3af41"),
+                  textColor: Colors.white,
+                  child: Text("Download".toUpperCase(),
+                      style: TextStyle(fontSize: 14)),
+                ),
+              ],
+            )
+          ),
+          new Container(
+            // color: Colors.yellow,
+            padding: new EdgeInsets.symmetric(horizontal: 20.0),
+            height: 20.0,
+            child: GridTile(
+              child: Row(
+                children: [
+                  Text(
+                    product!=null ? product.product_sku : " ",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0
+                    )
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    product!=null ? product.product_name : " ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 18.0
+                    )
+                  ),
+                ],
+              )
+            ),
+          ),
+          new Container(
+            // color: Colors.yellow,
+            padding: new EdgeInsets.symmetric(horizontal: 20.0),
+            height: 35.0,
+            child: GridTile(
+                child: Row(
+                  children: [
+                    Text(
+                        "\₹$price",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26.0
+                        )
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                        "\₹$old_price",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            decoration: TextDecoration.lineThrough
+                        )
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                        "$discount\% off",
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            fontStyle: FontStyle.italic
+                        )
+                    ),
+
+                  ],
+                )
+            ),
+          ),
+          new Container (
+            padding: const EdgeInsets.all(16.0),
+            width: full_width,
+            child: new Column (
+              children: <Widget>[
+                new Text (
+                    product!=null ? product.description : " ",
+                    textAlign: TextAlign.left
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

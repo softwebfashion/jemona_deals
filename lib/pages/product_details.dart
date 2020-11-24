@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
 
 // COMPONENTS
 import 'package:jemona_deals/models/product.dart';
@@ -133,7 +135,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                       side: BorderSide(color: HexColor("#19B6AA"))),
-                  onPressed: () {},
+                  onPressed: (){
+                    _sendToWhatsApp(phone: "919475635421", message: "Hello");
+                    },
                   color: HexColor("#19B6AA"),
                   textColor: Colors.white,
                   child: Text("Buy now".toUpperCase(),
@@ -144,7 +148,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                       side: BorderSide(color: HexColor("#A10968"))),
-                  onPressed: () {},
+                  onPressed: (){
+                    _shareBottomSheet(context);
+                  },
                   color: HexColor("#A10968"),
                   textColor: Colors.white,
                   child: Text("Share".toUpperCase(),
@@ -246,4 +252,53 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
     );
   }
+
+  void _shareBottomSheet(context){
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc){
+          return Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.share),
+                    title: new Text('Share Description'),
+                    onTap: () => {}
+                ),
+                new ListTile(
+                  leading: new Icon(Icons.folder_shared),
+                  title: new Text('Share Images'),
+                  onTap: () => {},
+                ),
+                new ListTile(
+                  leading: new Icon(Icons.copy),
+                  title: new Text('Copy Description'),
+                  onTap: () => {},
+                ),
+              ],
+            ),
+          );
+        }
+    );
+  }
+
+  void _sendToWhatsApp(
+      {@required String phone,
+        @required String message,
+      }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
+
 }

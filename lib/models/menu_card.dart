@@ -1,5 +1,6 @@
 import 'package:jemona_deals/models/category.dart';
 import 'package:jemona_deals/models/product.dart';
+import 'package:jemona_deals/models/unit.dart';
 
 class MenuCard{
   final int id;
@@ -9,6 +10,7 @@ class MenuCard{
   final String name;
   final List<Category> cats;
   final List<Product> products;
+  final Unit unit;
 
   MenuCard({
     this.id,
@@ -17,7 +19,8 @@ class MenuCard{
     this.unit_id,
     this.name,
     this.cats,
-    this.products
+    this.products,
+    this.unit
   });
 
   factory MenuCard.fromJson(Map<String, dynamic> parsedJson){
@@ -34,6 +37,7 @@ class MenuCard{
       var list_pros = parsedJson['products'] as List;
       dataListProd = list_pros.map((i) => Product.fromJson(i)).toList();
     }
+
     return MenuCard(
         id: parsedJson['id'],
         mode: parsedJson['mode'],
@@ -41,7 +45,8 @@ class MenuCard{
         unit_id: parsedJson['unit_id'],
         name: parsedJson['name'],
         cats: dataList,
-        products: dataListProd
+        products: dataListProd,
+        unit: parsedJson.containsKey('unit') ? Unit.fromJson(parsedJson['unit']) : null
     );
   }
 }

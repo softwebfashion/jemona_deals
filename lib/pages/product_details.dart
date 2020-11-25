@@ -32,7 +32,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     // print("PRODUCT ID: " + widget.p_id.toString());
     // print("MENU CARD ID: " + widget.mc_id.toString());
     var response = await http.get(
-        Uri.encodeFull("http://jemona.dopos.in:3001/api/v2/menu_cards/"+ widget.mc_id.toString() +"/product/"+ widget.p_id.toString() +"?device_id=DOPOS20&email=admin@dopos.in&resources=product_images&image_size=original"),
+        Uri.encodeFull("http://jemona.dopos.in:3001/api/v2/menu_cards/"+ widget.mc_id.toString() +"/product/"+ widget.p_id.toString() +"?device_id=DOPOS20&email=admin@dopos.in&resources=product_images,unit&image_size=original"),
         headers: {
           "Content-Type": "application/json"
         }
@@ -136,7 +136,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                       borderRadius: BorderRadius.circular(18.0),
                       side: BorderSide(color: HexColor("#19B6AA"))),
                   onPressed: (){
-                    _sendToWhatsApp(phone: "919475635421", message: "Hello");
+                    String _mobile = null;
+                    String _msg = null;
+                    if(product != null){
+                      _mobile = product.unit.phone;
+
+                      _msg = "I want to buy product collection *_("+ product.product_sku +") "+ product.product_name +"_*";
+                      print(_msg);
+                    }
+                    _sendToWhatsApp(phone: "91$_mobile", message: _msg.toString());
                     },
                   color: HexColor("#19B6AA"),
                   textColor: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:jemona_deals/models/product_image.dart';
+import 'package:jemona_deals/models/unit.dart';
 
 class Product {
   final product_id;
@@ -9,6 +10,7 @@ class Product {
   final sell_price;
   final description;
   final List<ProductImage> product_images;
+  final Unit unit;
 
   Product({
     this.product_id,
@@ -19,6 +21,7 @@ class Product {
     this.sell_price,
     this.description,
     this.product_images,
+    this.unit
   });
 
   factory Product.fromJson(Map<String, dynamic> parsedJson){
@@ -37,7 +40,8 @@ class Product {
       procured_price: parsedJson['procured_price'],
       sell_price: parsedJson['sell_price'],
       description: parsedJson.containsKey('description') ? parsedJson['description'] : null,
-      product_images: parsedJson.containsKey('product_images') ? imageList : null
+      product_images: parsedJson.containsKey('product_images') ? imageList : null,
+      unit: parsedJson.containsKey('unit') ? Unit.fromJson(parsedJson['unit']) : null
     );
   }
 }
